@@ -127,29 +127,6 @@ def retrieve_result():
     except Exception as e:
         return jsonify({"Error": f"Unexpected error: {str(e)}"}), 500
 
-@app.route('/upload', methods=['POST'])
-def upload_image():
-    try:
-        if 'image' not in request.files:
-            return jsonify({"Error": "No image file provided"}), 400
-
-        image_file = request.files['image']
-
-        if image_file.filename == '':
-            return jsonify({"Error": "No selected file"}), 400
-
-        # Make predictions
-        prediction_result = make_prediction(image_file)
-
-        # Update the result file with the prediction results
-        update_result_file(prediction_result)
-
-        # Update global counts
-        total_ribbons = prediction_result["BeautyEnhance"]
-        total_arrows = prediction_result["JointEnhance"]
-        total_stars = prediction_result["BoneEnhance"]
-
-
 if __name__ == '__main__':
     initial_counts = read_from_json(result_file)
     total_ribbons = initial_counts.get("total_ribbons")
